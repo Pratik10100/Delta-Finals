@@ -19,6 +19,7 @@ var score=0;
 var level=1;
 var init_time=new Date();
 var life=3;
+var over=0;
 
 
 var c=document.getElementById("myCanvas");
@@ -32,12 +33,13 @@ window.addEventListener('mousemove', function(evt)
            mx= evt.clientX; 
            my= evt.clientY ;
 		   
-		    ctx.beginPath();
+		if(over==0){
+		ctx.beginPath();
 		ctx.fillStyle="#33FFFF";
 		ctx.arc(mx-15,my+5,5,0,2*Math.PI);
 		ctx.closePath();
 		ctx.fill();
-           		
+        }   		
         score+=0.05;	
 
 		//var ll=setInterval(life_draw,20);
@@ -92,7 +94,7 @@ function newdot()
    n++;
    }
    
-   rnd=Math.floor(Math.random()*25);
+   rnd=Math.floor(Math.random()*100);
    if(rnd==5)
    {
       var tx=Math.floor(Math.random()*100)+800;
@@ -227,6 +229,7 @@ function gameover()
 {
    clearInterval(tt);
    clearInterval(dd);
+   over++;
    
      ctx.font = '22pt Calibri';
      ctx.fillStyle = 'white';
