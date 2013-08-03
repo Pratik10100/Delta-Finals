@@ -5,13 +5,30 @@
 .myCanvas
 {
 cursor:crosshair;
+border:10px solid #40403A;
+position:relative;
+
+}
+body
+{
+background-color:#000000;
+color:grey;
+font-family:Calibri;
+font-size:20px;
+}
+h2
+{
+color:red;
+font-family:Calibri;
+position:relative;
+
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="myCanvas" class="myCanvas" width="900" height="500" style="border:1px solid #d3d3d3;" align="center">
+<canvas id="myCanvas" class="myCanvas" width="900" height="500"  align="center">
 </canvas>
 
 <script>
@@ -20,7 +37,10 @@ var level=1;
 var init_time=new Date();
 var life=3;
 var over=0;
-
+var follow_x=new Array();
+var follow_y=new Array();
+var follow_pos=0;
+var current_pos=0;
 
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
@@ -36,14 +56,21 @@ window.addEventListener('mousemove', function(evt)
 		if(over==0){
 		ctx.beginPath();
 		ctx.fillStyle="#33FFFF";
+		mx=mx-8;
+		my=my-7;
 		ctx.arc(mx-15,my+5,5,0,2*Math.PI);
+		
+		follow_x[follow_pos]=mx;
+		follow_y[follow_pos]=my;
+		follow_pos++;
+		
 		ctx.closePath();
 		ctx.fill();
         }   		
         score+=0.09;	
 
 		//var ll=setInterval(life_draw,20);
-		
+		//tail();
  
        }, false);
 	   
@@ -62,6 +89,18 @@ var power_begin=0;
 var pn=0;
 var n=0;
 
+function tail()
+{
+      ctx.beginPath();
+      ctx.moveTo(200, canvas.height / 2 - 50);
+      ctx.lineTo(canvas.width - 200, canvas.height / 2 - 50);
+      ctx.lineWidth = 20;
+      ctx.strokeStyle = '#0000ff';
+      ctx.lineCap = 'butt';
+      ctx.stroke();
+	  ctx.closePath();
+
+}
 
 function newdot()
 {
@@ -94,7 +133,7 @@ function newdot()
    n++;
    }
    
-   rnd=Math.floor(Math.random()*100);
+   rnd=Math.floor(Math.random()*150);
    if(rnd==5)
    {
       var tx=Math.floor(Math.random()*100)+800;
@@ -113,7 +152,24 @@ function newdot()
    
    pn++;    
    }
-	
+    if(rnd==19)
+   {
+      var tx=Math.floor(Math.random()*100)+800;
+   var ty=Math.floor(Math.random()*500)-Math.floor(Math.random()*300);
+   var tr=Math.floor(Math.random()*3)+3;
+   
+   ctx.beginPath();
+   ctx.fillStyle="#0099FF";
+   ctx.arc(tx,ty,8,0,2*Math.PI);
+   ctx.stroke();
+   ctx.closePath();
+   ctx.fill();
+   px[pn]=tx;
+   py[pn]=ty;
+   color[pn]="#0099FF";
+   
+   pn++;    
+   }
 }
 
 addEventListener("keypress", function(event){
@@ -154,9 +210,7 @@ function draw()
 	 ctx.fill();
    
    }
-   
-   
-       ctx.beginPath();
+        ctx.beginPath();
 		ctx.fillStyle="#33FFFF";
 		ctx.arc(mx-18,my+5,5,0,2*Math.PI);
 		ctx.closePath();
@@ -183,7 +237,7 @@ function draw()
 	
 	}
 	
-	if(power_begin+50<score && powered==1)
+	if(power_begin+50<score && powered>0)
 	{
 	  powered=0;
 	  ctx.globalAlpha =1;
@@ -192,9 +246,8 @@ function draw()
 	if(powered>0)
 	power();
 
-  
 }
-
+/*
 function life_draw()
 {
         
@@ -213,6 +266,7 @@ function life_draw()
 			ctx.fill();
 		}
 }
+*/
 function power()
 {
     
@@ -225,8 +279,13 @@ function power()
 	 ctx.arc(mx-18,my+5,30,0,2*Math.PI);
 	 ctx.closePath();
 	 ctx.fill();
+	 
 	}
 	
+	if(powered==2)
+	{
+	 
+	}
 }
 
 function gameover()
@@ -253,17 +312,18 @@ function check()
     if(x[i]> (mx-18-5)-r[i] && x[i]< (mx-18+5)+r[i]  && y[i]>(my-r[i]) && y[i]< (my+5+5)+r[i])
 	{
 	
-	if(powered==0 && life==1)
+	if(powered!=1 && life==1)
 		gameover();
-	if(powered==0 && life>1)
+	if(powered!=1 && life>1)
 	 {
 	    x[i]=0;
 	    life--;
 	 }
 	if(powered==1)
 	{
-	   x[i]-=15;	 
+	   x[i]-=25;	 
 	}
+	
 	
 	
 	}
@@ -277,7 +337,16 @@ function check()
   {
     if(px[i]> (mx-18-5)-5 && px[i]< (mx-18+5)+5  && py[i]>(my-5) && py[i]< (my+5+5)+5)
 	{
+	   if(color[i]=="#009900")
 	   powered=1;
+	   
+	   if(color[i]=="#0099FF")
+	   {
+	     life++;
+		 px[i]=0;
+		 
+	   }
+	   
 	   power_begin=score;
 	
 	}
@@ -286,6 +355,8 @@ function check()
 } 
 	   
 </script> 
-
+<h2>Legend:</h2>
+<text style="color:#009900">Green cirlce</text>: Shield<br/>
+<text style="color:#0099FF">Blue circle</text>: Life+1<br/>
 </body>
 </html>
