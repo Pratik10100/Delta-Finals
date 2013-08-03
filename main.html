@@ -18,10 +18,15 @@ cursor:crosshair;
 var score=0;
 var level=1;
 var init_time=new Date();
+var life=3;
+
 
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
 var mx=252,my=250;
+var life1_x=242,life1_y=260;
+var life2_x=232,life2_y=270;
+
 window.addEventListener('mousemove', function(evt) 
        {   
            mx= evt.clientX; 
@@ -33,7 +38,10 @@ window.addEventListener('mousemove', function(evt)
 		ctx.closePath();
 		ctx.fill();
            		
-        score+=0.05;				
+        score+=0.05;	
+
+		//var ll=setInterval(life_draw,20);
+		
  
        }, false);
 	   
@@ -110,7 +118,7 @@ addEventListener("keypress", function(event){
   });
 	   
 tt=setInterval(draw,10);
-dd=setInterval(newdot,350);
+dd=setInterval(newdot,150-(level*100));
 
 function draw()
 {
@@ -162,16 +170,45 @@ function draw()
 		
 	check();
 	
+	if(score>50)
+	{level=2;
+	 
+	}
+	
+	if(score>100)
+	{level=3;
+	
+	}
+	
 	if(power_begin+50<score && powered==1)
 	{
 	  powered=0;
 	}
+	
 	if(powered==1)
 	power();
 
   
 }
 
+function life_draw()
+{
+        
+		ctx.beginPath();
+		ctx.fillStyle="#33FFFF";
+		ctx.arc(mx-18-5,my+5+15,3,0,2*Math.PI);
+		ctx.closePath();
+		ctx.fill();
+		
+		if(life==3)
+		{
+		    ctx.beginPath();
+			ctx.fillStyle="#33FFFF";
+			ctx.arc(mx-18-15,my+5+25,3,0,2*Math.PI);
+			ctx.closePath();
+			ctx.fill();
+		}
+}
 function power()
 {
     
@@ -186,6 +223,19 @@ function power()
 	
 }
 
+function gameover()
+{
+   clearInterval(tt);
+   clearInterval(dd);
+   
+     ctx.font = '22pt Calibri';
+     ctx.fillStyle = 'white';
+	var curr_time=new Date();
+	var diff= (curr_time.getTime() - init_time.getTime())/1000;
+	 ctx.fillText("Game Over.",400,150);
+    ctx.fillText("Level:"+level+" Score:"+Math.floor(score)+"  Time:"+diff,300,220);
+
+}
 
 function check()
 {
@@ -196,7 +246,7 @@ function check()
 	{
 	
 	if(powered==0)
-		alert("Game over");
+		gameover();
 	else
 	{
 	   x[i]-=15;	 
@@ -206,7 +256,7 @@ function check()
   }
   if(mx-18-5 <0 || mx-18+5>900 || my+5+5>500 || my-5<0)
   {
-    alert("Game over");
+	gameover();
   
   }
   for(i=0;i<pn;i++)
