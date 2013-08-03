@@ -60,9 +60,12 @@ window.addEventListener('mousemove', function(evt)
 		my=my-7;
 		ctx.arc(mx-15,my+5,5,0,2*Math.PI);
 		
-		follow_x[follow_pos]=mx;
+		/*follow_x[follow_pos]=mx;
 		follow_y[follow_pos]=my;
-		follow_pos++;
+		follow_pos++;*/
+		
+		follow_x.push(mx);
+		follow_y.push(my);
 		
 		ctx.closePath();
 		ctx.fill();
@@ -91,15 +94,21 @@ var n=0;
 
 function tail()
 {
-      ctx.beginPath();
-      ctx.moveTo(200, canvas.height / 2 - 50);
-      ctx.lineTo(canvas.width - 200, canvas.height / 2 - 50);
-      ctx.lineWidth = 20;
-      ctx.strokeStyle = '#0000ff';
-      ctx.lineCap = 'butt';
+      
+	  var j=0;
+	  for(j=follow_pos;j<follow_x.length-1;j++)
+	  {
+	  ctx.beginPath();
+      ctx.moveTo(follow_x[j]-15, follow_y[j]+5);
+      ctx.lineTo(follow_x[j+1]-15,follow_y[j+1]+5);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#40403A';
       ctx.stroke();
 	  ctx.closePath();
-
+	  }
+	  if(follow_pos<follow_x.length-15)
+	  follow_pos++;
+	  
 }
 
 function newdot()
@@ -238,7 +247,18 @@ function draw()
 	
 	if(score>100)
 	{level=3;
+	   ctx.font = '16pt Calibri';
+    ctx.fillStyle = '#FFFFFF';
+	ctx.fillText("LEVEL: "+level,800,480);
 	
+	}
+	if(score>100 && Math.floor(score)%50==0)
+	{
+	  level++;
+	   ctx.font = '16pt Calibri';
+    ctx.fillStyle = '#FFFFFF';
+	ctx.fillText("LEVEL: "+level,800,480);
+	  
 	}
 	
 	if(power_begin+50<score && powered>0)
@@ -249,6 +269,8 @@ function draw()
 	
 	if(powered>0)
 	power();
+	
+	tail();
 
 }
 /*
