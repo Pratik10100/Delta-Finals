@@ -112,7 +112,8 @@ function newdot()
    color[pn]="#009900";
    
    pn++;    
-   }     
+   }
+	
 }
 
 addEventListener("keypress", function(event){
@@ -166,8 +167,8 @@ function draw()
         ctx.fillStyle = '#949B9B';
 		var curr_time=new Date();
 		var diff= (curr_time.getTime() - init_time.getTime())/1000;
-        ctx.fillText("Level: "+level+" Score:"+Math.floor(score)+"  Time: "+diff,350,20);
-		
+        ctx.fillText("Level: "+level+" Score:"+Math.floor(score)+" Life: "+life+"  Time: "+diff,350,20);
+		 ctx.fillText(" Life: "+life,450,480);
 		score+=0.05;
 		
 	check();
@@ -188,7 +189,7 @@ function draw()
 	  ctx.globalAlpha =1;
 	}
 	
-	if(powered==1)
+	if(powered>0)
 	power();
 
   
@@ -215,6 +216,8 @@ function life_draw()
 function power()
 {
     
+	 if(powered==1)
+	 {
 	 ctx.globalAlpha = 0.5;
 	 
      ctx.beginPath();
@@ -222,7 +225,7 @@ function power()
 	 ctx.arc(mx-18,my+5,30,0,2*Math.PI);
 	 ctx.closePath();
 	 ctx.fill();
-	
+	}
 	
 }
 
@@ -238,6 +241,7 @@ function gameover()
 	var diff= (curr_time.getTime() - init_time.getTime())/1000;
 	 ctx.fillText("Game Over.",400,150);
     ctx.fillText("Level:"+level+" Score:"+Math.floor(score)+"  Time:"+diff,300,220);
+	
 
 }
 
@@ -249,12 +253,18 @@ function check()
     if(x[i]> (mx-18-5)-r[i] && x[i]< (mx-18+5)+r[i]  && y[i]>(my-r[i]) && y[i]< (my+5+5)+r[i])
 	{
 	
-	if(powered==0)
+	if(powered==0 && life==1)
 		gameover();
-	else
+	if(powered==0 && life>1)
+	 {
+	    x[i]=0;
+	    life--;
+	 }
+	if(powered==1)
 	{
 	   x[i]-=15;	 
 	}
+	
 	
 	}
   }
