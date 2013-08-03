@@ -40,7 +40,7 @@ window.addEventListener('mousemove', function(evt)
 		ctx.closePath();
 		ctx.fill();
         }   		
-        score+=0.05;	
+        score+=0.09;	
 
 		//var ll=setInterval(life_draw,20);
 		
@@ -185,6 +185,7 @@ function draw()
 	if(power_begin+50<score && powered==1)
 	{
 	  powered=0;
+	  ctx.globalAlpha =1;
 	}
 	
 	if(powered==1)
