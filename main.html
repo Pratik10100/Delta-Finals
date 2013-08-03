@@ -41,6 +41,15 @@ window.addEventListener('mousemove', function(evt)
 var x=new Array();
 var y=new Array();
 var r=new Array();
+
+var px=new Array();
+var py=new Array();
+var color=new Array();
+
+var powered=0;
+var power_begin=0;
+
+var pn=0;
 var n=0;
 
 
@@ -73,8 +82,27 @@ function newdot()
    y[n]=ty;
    r[n]=tr;
    n++;
-   
    }
+   
+   rnd=Math.floor(Math.random()*25);
+   if(rnd==5)
+   {
+      var tx=Math.floor(Math.random()*100)+800;
+   var ty=Math.floor(Math.random()*500)-Math.floor(Math.random()*300);
+   var tr=Math.floor(Math.random()*3)+3;
+   
+   ctx.beginPath();
+   ctx.fillStyle="#009900";
+   ctx.arc(tx,ty,8,0,2*Math.PI);
+   ctx.stroke();
+   ctx.closePath();
+   ctx.fill();
+   px[pn]=tx;
+   py[pn]=ty;
+   color[pn]="#009900";
+   
+   pn++;    
+   }     
 }
 
 addEventListener("keypress", function(event){
@@ -102,6 +130,21 @@ function draw()
 	 ctx.fill();
   
    }
+   
+   for(i=0;i<pn;i++)
+   {
+      px[i]--;	 
+	   py[i]++;	 
+	 
+	 ctx.beginPath();
+	 ctx.fillStyle=color[i];
+     ctx.arc(px[i],py[i],8,0,2*Math.PI);
+	 ctx.closePath();
+	 ctx.fill();
+   
+   }
+   
+   
        ctx.beginPath();
 		ctx.fillStyle="#33FFFF";
 		ctx.arc(mx-18,my+5,5,0,2*Math.PI);
@@ -118,8 +161,31 @@ function draw()
 		score+=0.05;
 		
 	check();
+	
+	if(power_begin+50<score && powered==1)
+	{
+	  powered=0;
+	}
+	if(powered==1)
+	power();
+
   
 }
+
+function power()
+{
+    
+	 ctx.globalAlpha = 0.5;
+	 
+     ctx.beginPath();
+	 ctx.fillStyle=color[pn];
+	 ctx.arc(mx-18,my+5,30,0,2*Math.PI);
+	 ctx.closePath();
+	 ctx.fill();
+	
+	
+}
+
 
 function check()
 {
@@ -127,14 +193,30 @@ function check()
   for(i=0;i<n;i++)
   {
     if(x[i]> (mx-18-5)-r[i] && x[i]< (mx-18+5)+r[i]  && y[i]>(my-r[i]) && y[i]< (my+5+5)+r[i])
-	alert("Game over");
+	{
 	
-
+	if(powered==0)
+		alert("Game over");
+	else
+	{
+	   x[i]-=15;	 
+	}
+	
+	}
   }
   if(mx-18-5 <0 || mx-18+5>900 || my+5+5>500 || my-5<0)
   {
     alert("Game over");
   
+  }
+  for(i=0;i<pn;i++)
+  {
+    if(px[i]> (mx-18-5)-5 && px[i]< (mx-18+5)+5  && py[i]>(my-5) && py[i]< (my+5+5)+5)
+	{
+	   powered=1;
+	   power_begin=score;
+	
+	}
   }
 
 } 
