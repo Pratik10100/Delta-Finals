@@ -18,6 +18,9 @@ cursor:crosshair;
 
 <script>
 var score=0;
+var level=1;
+var time=new Date();
+
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
 var mx=0,my=0;
@@ -31,7 +34,8 @@ window.addEventListener('mousemove', function(evt)
 		ctx.arc(mx-15,my+5,5,0,2*Math.PI);
 		ctx.closePath();
 		ctx.fill();
-           		   
+           		
+        score+=0.05;				
  
        }, false);
 	   
@@ -101,9 +105,9 @@ function draw()
 		ctx.fill();
     
 	
-	     ctx.font = '18pt Calibri';
+	     ctx.font = '12pt Calibri';
         ctx.fillStyle = '#949B9B';
-        ctx.fillText("Score:"+Math.floor(score),400,20);
+        ctx.fillText("Score:"+Math.floor(score)+"  Time: ",400,20);
 		
 		score+=0.06;
   
