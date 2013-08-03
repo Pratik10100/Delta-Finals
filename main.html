@@ -229,7 +229,11 @@ function draw()
 	
 	if(score>50)
 	{level=2;
-	 
+ 
+	 ctx.font = '16pt Calibri';
+    ctx.fillStyle = '#FFFFFF';
+	ctx.fillText("LEVEL: "+level,800,480);
+	
 	}
 	
 	if(score>100)
@@ -299,7 +303,7 @@ function gameover()
 	var curr_time=new Date();
 	var diff= (curr_time.getTime() - init_time.getTime())/1000;
 	 ctx.fillText("Game Over.",400,150);
-    ctx.fillText("Level:"+level+" Score:"+Math.floor(score)+"  Time:"+diff,300,220);
+    ctx.fillText("Level:"+level+"  Score:"+Math.floor(score)+"  Time:"+diff,300,220);
 	
 
 }
@@ -318,6 +322,7 @@ function check()
 	 {
 	    x[i]=0;
 	    life--;
+		score+=50;
 	 }
 	if(powered==1)
 	{
